@@ -8,3 +8,7 @@ gradlew jar
 
 Run:
 java -Xbootclasspath/p:lib/byte-buddy-1.4.25.jar:build/libs/callspy-0.1.jar -javaagent:build/libs/callspy-0.1.jar org.example.callspy.example.RandomClassCallingThings
+
+gradle clean build && java -javaagent:build/libs/callspy-0.1.jar org.example.callspy.example.RandomClassCallingThings
+
+gradle clean build && java -javaagent:build/libs/callspy-0.1.jar org.example.spring.ioc.DemoFileSystemXmlApplicationContext

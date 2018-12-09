@@ -1,6 +1,5 @@
 package com.zeroturnaround.callspy;
 
-import java.lang.reflect.Method;
 
 import net.bytebuddy.asm.Advice;
 
@@ -24,9 +23,16 @@ Any other # character must be escaped by \ which can be escaped by itself. This 
 public class MyAdvice {
 	
 	  @Advice.OnMethodEnter
-	  public static void enter(@Advice.Origin Class klass, @Advice.Origin("#m") String methodName) {
+	  public static void enter(
+	  		@Advice.Origin Class klass,
+			@Advice.Origin("#m") String methodName,
+			@Advice.Origin("#t") String declaringType,
+			@Advice.Origin("#s") String signature,
+			@Advice.Origin("#r") String returnType
+	  ) {
 		Stack.push();
-		Stack.log(klass.getSimpleName() + "." + methodName + "()");
+//		Stack.log(klass.getSimpleName() + "." + methodName + "()");
+		  Stack.log(klass.getTypeName() + "." + methodName + signature + ": " + returnType);
 	  }
 	  
 	  @Advice.OnMethodExit

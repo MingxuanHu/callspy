@@ -5,12 +5,17 @@ jar.baseName = 'callspy'
 version = 0.1
 
 repositories {
+    mavenCentral()
     jcenter()
 }
 
 dependencies {
     compile 'net.bytebuddy:byte-buddy:1.4.25'
-    testCompile "junit:junit:4.11"
+    // https://mvnrepository.com/artifact/org.javassist/javassist
+    compile group: 'org.javassist', name: 'javassist', version: '3.24.0-GA'
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: '2.1.1.RELEASE'
+
 }
 
 compileJava {
