@@ -79,14 +79,17 @@ public class GephiGenerator {
     private static void getNodeAndEdge(Node thisNode, Node previousNode, StringBuffer nodeBuffer, StringBuffer edgeBuffer) {
         nodeBuffer.append("<node id=\"").append(thisNode.getId()).append("\" label=\"").append(thisNode.getLable()).append("\" />");
         if (thisNode.getParent() != null) {
-            edgeBuffer.append("<edge id=\"").append(edgeCount++).append("\" source=\"")
-                    .append(thisNode.getParent().getId()).append("\" target=\"").append(thisNode.getId()).append("\" weight=\"1\" />");
+            edgeBuffer.append("<edge id=\"").append(edgeCount).append("\" source=\"")
+                    .append(thisNode.getParent().getId()).append("\" target=\"").append(thisNode.getId())
+                    .append("\" label=\"").append(edgeCount++).append("\" weight=\"1\" />");
         }
         for (Node child : thisNode.getChildren())
             getNodeAndEdge(child, thisNode, nodeBuffer, edgeBuffer);
-        if (previousNode != null) {
-            edgeBuffer.append("<edge id=\"").append(edgeCount++).append("\" source=\"")
-                    .append(thisNode.getId()).append("\" target=\"").append(previousNode.getId()).append("\" weight=\"1\" />");
-        }
+        // skip the return edges for clarity
+//        if (previousNode != null) {
+//            edgeBuffer.append("<edge id=\"").append(edgeCount).append("\" source=\"")
+//                    .append(thisNode.getId()).append("\" target=\"").append(previousNode.getId())
+//                    .append("\" label=\"").append(edgeCount++).append("\" weight=\"1\" />");
+//        }
     }
 }
