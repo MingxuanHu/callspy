@@ -34,7 +34,6 @@ jar {
 
     manifest {
         attributes(
-                'Main-Class': 'org.example.callspy.example.RandomClassCallingThings',
                 'Premain-Class': 'com.zeroturnaround.callspy.Agent',
                 'Agent-Class': 'com.zeroturnaround.callspy.Agent',
                 'Can-Redefine-Classes': 'true',

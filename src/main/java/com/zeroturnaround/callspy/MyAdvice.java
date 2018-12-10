@@ -26,17 +26,18 @@ Any other # character must be escaped by \ which can be escaped by itself. This 
 
 public class MyAdvice {
 	public static boolean manual = false;
-	public static Set<String> noSet;
+	public static Set<String> noSet, yesSet;
 	static {
 		noSet = new HashSet<>();
 		noSet.add("n");
 		noSet.add("no");
-		noSet.add("N");
-		noSet.add("No");
 		noSet.add("f");
 		noSet.add("false");
-		noSet.add("F");
-		noSet.add("False");
+		yesSet = new HashSet<>();
+		yesSet.add("y");
+		yesSet.add("yes");
+		yesSet.add("t");
+		yesSet.add("true");
 	}
 	
 	  @Advice.OnMethodEnter
@@ -57,7 +58,11 @@ public class MyAdvice {
 			System.out.println("-- " + klass.getTypeName() + "." + methodName + signature + ": " + returnType);
 			System.out.print("-- Do you want to log the method above (y)?");
 			String input = new Scanner(System.in).nextLine();
-			if (noSet.contains(input.trim())) {
+			while (! noSet.contains(input.trim().toLowerCase()) && ! yesSet.contains(input.trim().toLowerCase())) {
+				System.out.print("-- Do you want to log the method above (y)?");
+				input = new Scanner(System.in).nextLine();
+			}
+			if (noSet.contains(input.trim().toLowerCase())) {
 				Stack.setLockOnHeight(Stack.height());
 				return;
 			}
