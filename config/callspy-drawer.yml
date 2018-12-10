@@ -1,0 +1,5 @@
+CALLSPY:
+  IncludePackages:
+    startWith:
+      - org.springframework
+      - org.example

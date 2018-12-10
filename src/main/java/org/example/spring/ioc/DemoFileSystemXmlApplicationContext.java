@@ -7,7 +7,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class DemoFileSystemXmlApplicationContext {
     public static void main(String... args) {
-        ApplicationContext context = new FileSystemXmlApplicationContext("file:xml/demo-FileSystemXmlApplicationContext.xml");
+        ApplicationContext context = new FileSystemXmlApplicationContext("file:config/demo-FileSystemXmlApplicationContext.xml");
         Entitlement ent=(Entitlement) context.getBean("entitlement");
         System.out.println(ent.getName());
     }
