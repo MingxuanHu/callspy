@@ -111,4 +111,6 @@ output
 call-tree.txt
 gephi.xml
 gephi.gexf
+manual-in.txt
+manual-out.txt
 

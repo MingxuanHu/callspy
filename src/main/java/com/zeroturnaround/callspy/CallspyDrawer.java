@@ -8,22 +8,28 @@ public class CallspyDrawer {
         Options options = new Options();
 
         Option manualOpt = new Option("m", "manual", false,
-                "manually choose which method to be logged in call graph.");
+                "Manually choose which method to be logged in call graph.");
         manualOpt.setRequired(false);
         options.addOption(manualOpt);
 
         Option consoleOpt = new Option("o", "console", false,
-                "set if you want the call tree to be printed to console.");
+                "Set if you want the call tree to be printed to console.");
         consoleOpt.setRequired(false);
         options.addOption(consoleOpt);
 
         Option fileOpt = new Option("f", "file", true,
-                "output the call tree to file.");
+                "Output the call tree to file.");
         fileOpt.setRequired(false);
         options.addOption(fileOpt);
 
+        Option loadOpt = new Option("l", "load", true,
+                "Load the manual choosing process from a file (can be an empty file), and write your choosing history to another file.");
+        loadOpt.setRequired(false);
+        loadOpt.setArgs(2);
+        options.addOption(loadOpt);
+
         Option gephiOpt = new Option("g", "gephi", true,
-                "use the call tree to generate a Gephi xml file, must be used together with -f.");
+                "Use the call tree to generate a Gephi xml file, must be used together with -f.");
         gephiOpt.setRequired(false);
         options.addOption(gephiOpt);
 
@@ -50,9 +56,11 @@ public class CallspyDrawer {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             formatter.printHelp("java -javaagent:build/libs/callspy-0.1.jar " +
-                    "com.zeroturnaround.callspy.CallspyDrawer [-m] [-o] [-f output/call/tree.txt] " +
-                            "[-g output/Gephi/graph.xml] -c main.class.name [-a arg1,arg2,arg3,...]",
+                    "com.zeroturnaround.callspy.CallspyDrawer [-m] [-o] [-l manual/in.txt manual/out.txt] " +
+                            "[-f output/call/tree.txt] [-g output/Gephi/graph.xml]" +
+                            " -c main.class.name [-a arg1,arg2,arg3,...]",
                     options);
+            System.exit(-1);
         }
 
         try {
@@ -64,9 +72,11 @@ public class CallspyDrawer {
                 Stack.stringBuffer = new StringBuffer(524288);
             }
 
-            if (cmd.hasOption("console")) {
+            if (cmd.hasOption("console"))
                 Stack.outputToConsole = true;
-            }
+
+            if (cmd.hasOption("load"))
+                ManualLoad.load(cmd.getOptionValues("load")[0], cmd.getOptionValues("load")[1]);
 
             String[] classArgs = new String[0];
             if (cmd.hasOption("arguments"))
@@ -86,6 +96,13 @@ public class CallspyDrawer {
 
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (ManualLoad.ifLoad())
+                    ManualLoad.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

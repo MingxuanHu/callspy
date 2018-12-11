@@ -42,32 +42,49 @@ public class MyAdvice {
 	
 	  @Advice.OnMethodEnter
 	  public static void enter(
-	  		@Advice.Origin Class klass,
+	  		@Advice.Origin Class clazz,
 			@Advice.Origin("#m") String methodName,
 			@Advice.Origin("#s") String signature,
 			@Advice.Origin("#r") String returnType
 	  ) {
 		Stack.push();
-		if (manual) {
+		if (manual || ManualLoad.ifLoad()) {
 			if (Stack.height() > Stack.getLockOnHeight()) {
 				return;
 			}
 			Stack.setLockOnHeight(Integer.MAX_VALUE);
 
 			System.out.println("========================================================");
-			System.out.println("-- " + klass.getTypeName() + "." + methodName + signature + ": " + returnType);
-			System.out.print("-- Do you want to log the method above (y)?");
-			String input = new Scanner(System.in).nextLine();
-			while (! noSet.contains(input.trim().toLowerCase()) && ! yesSet.contains(input.trim().toLowerCase())) {
-				System.out.print("-- Do you want to log the method above (y)?");
+			System.out.println("-- " + clazz.getTypeName() + "." + methodName + signature + ": " + returnType);
+			System.out.print("-- Do you want to log the method above (y/n)? ");
+			String input;
+			if (ManualLoad.ifLoad() && (input = ManualLoad.getNextLoaded()) != null) { // use loaded history
+				System.out.println(input);
+			} else { // use user input
 				input = new Scanner(System.in).nextLine();
+				while (!noSet.contains(input.trim().toLowerCase()) && !yesSet.contains(input.trim().toLowerCase())) {
+					if ("fuck off".equals(input)) {
+						try {
+							if (ManualLoad.ifLoad())
+								ManualLoad.flush();
+						} catch (Exception e) {
+							e.printStackTrace();
+						} finally {
+							System.out.println("yes ma'am");
+							System.exit(0);
+						}
+					}
+					System.out.print("-- Do you want to log the method above (type y or n)? ");
+					input = new Scanner(System.in).nextLine();
+				}
 			}
+			ManualLoad.log(input);
 			if (noSet.contains(input.trim().toLowerCase())) {
 				Stack.setLockOnHeight(Stack.height());
 				return;
 			}
 		}
-		Stack.log(klass.getTypeName() + "." + methodName + signature + ": " + returnType);
+		Stack.log(clazz.getTypeName() + "." + methodName + signature + ": " + returnType);
 	  }
 	  
 	  @Advice.OnMethodExit
