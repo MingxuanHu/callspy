@@ -45,8 +45,9 @@ public class Stack {
 	}
 
 	public static void flushToFile() throws Exception {
-		try (PrintWriter out = new PrintWriter(outputFile)) {
-			out.print(stringBuffer);
-		}
+		if (stringBuffer != null)
+			try (PrintWriter out = new PrintWriter(outputFile)) {
+				out.print(stringBuffer);
+			}
 	}
 }

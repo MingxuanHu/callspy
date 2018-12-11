@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ManualLoad {
+    private static boolean yesForAll = false;
     private static boolean ifLoad = false;
     private static String outputFile;
     private static List<String> loadedHistory;
@@ -15,6 +16,10 @@ public class ManualLoad {
 
     public static boolean ifLoad() {
         return ifLoad;
+    }
+
+    public static void doYesForAll() {
+        yesForAll = true;
     }
 
     public static void load(String inputFile, String outputFile) throws Exception {
@@ -38,6 +43,8 @@ public class ManualLoad {
     }
 
     public static String getNextLoaded() {
+        if (yesForAll)
+            return "y";
         if (loadedHistoryPointer == loadedHistory.size())
             return null;
         return loadedHistory.get(loadedHistoryPointer++);
@@ -45,6 +52,8 @@ public class ManualLoad {
 
 
     public static void log(String input) {
+        if (yesForAll)
+            return;
         if (choosingHistory == null) {
             choosingHistory = new ArrayList<>();
         }
