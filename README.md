@@ -45,7 +45,9 @@ java -javaagent:build/libs/callspy-0.1.jar com.zeroturnaround.callspy.CallspyDra
 ```
 java -javaagent:build/libs/callspy-0.1.jar com.zeroturnaround.callspy.CallspyDrawer -m -f call-tree.txt -c org.example.simple.Class1
 ```
-- Load a manual choosing history from a file and output your method choosing history to a file. Better to be used when manual choosing is enable, this give you an opportunity to redo any mistakes: you can modify the output choosing history and load it again. BTW, you can try `fuck off` during the method choosing process, this will save your current process and exit the program.
+- Load a manual choosing history from a file and output your method choosing history to a file. Better to be used when manual choosing is enable, this give you an opportunity to redo any mistakes: you can modify the output choosing history and load it again.
+    - You can try `fuck off` during the method choosing process, this will save your current process and exit the program.
+    - You can also use `yes for all` during the choosing process, this will automatically log all remaining methods. This could be useful when you not sure if you should skip a method or not. Automatically inputted yes will not be logged, thus you can easily resume latter by loading the saved process.
 ```
 java -javaagent:build/libs/callspy-0.1.jar com.zeroturnaround.callspy.CallspyDrawer -m -o -l manual-in.txt manual-out.txt -c org.example.simple.Class1
 ```
