@@ -79,7 +79,7 @@ public class MyAdvice {
                     input = new Scanner(System.in).nextLine();
                 }
             }
-            ManualLoad.log(input);
+            ManualLoad.log(input, clazz.getTypeName() + "." + methodName + signature + ": " + returnType);
             if (noSet.contains(input.trim().toLowerCase())) {
                 Stack.setLockOnHeight(Stack.height());
                 return;

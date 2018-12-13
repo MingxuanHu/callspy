@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class ManualLoad {
     private static boolean yesForAll = false;
@@ -13,6 +15,7 @@ public class ManualLoad {
     private static List<String> loadedHistory;
     private static int loadedHistoryPointer = 0;
     private static List<String> choosingHistory;
+    private static List<String> choosingHistoryLog;
 
     public static boolean ifLoad() {
         return ifLoad;
@@ -37,7 +40,8 @@ public class ManualLoad {
             while ((line = bufferedReader.readLine()) != null) {
                 if (line.trim().isEmpty())
                     continue;
-                loadedHistory.add(line);
+
+                loadedHistory.add(line.split("-->")[0]);
             }
         }
     }
@@ -51,21 +55,24 @@ public class ManualLoad {
     }
 
 
-    public static void log(String input) {
+    public static void log(String input, String inputLog) {
         if (yesForAll)
             return;
         if (choosingHistory == null) {
-            choosingHistory = new ArrayList<>();
+            choosingHistory = new LinkedList<>();
+            choosingHistoryLog = new LinkedList<>();
         }
         choosingHistory.add(input);
+        choosingHistoryLog.add(inputLog);
     }
 
     public static void flush() throws Exception {
         try (PrintWriter out = new PrintWriter(outputFile)) {
             if (choosingHistory == null || choosingHistory.isEmpty())
                 return;
+            ListIterator<String> listIterator = choosingHistoryLog.listIterator();
             for (String str : choosingHistory) {
-                out.println(str);
+                out.println(str + "-->" + listIterator.next());
             }
         }
     }
