@@ -7,20 +7,32 @@ public class Node {
     private static int nodeCount = 0;
 
     private int id;
-    private String lable;
+    private String label;
     private Node parent;
     private List<Node> children = new LinkedList<>();
     private int stackHeight;
+    private String clazz;
 
-    public Node(String lable) {
+    public Node(String label) {
         id = nodeCount ++;
-        this.lable = modifyLable(lable);
+        this.label = modifyLable(label);
+        this.clazz = getClazz(label);
     }
 
-    public Node(String lable, Node parent) {
+    public Node(String label, Node parent) {
         id = nodeCount ++;
-        this.lable = modifyLable(lable);
+        this.label = modifyLable(label);
         this.parent = parent;
+        this.clazz = getClazz(label);
+    }
+
+    private String getClazz(String lable) {
+        try {
+            String[] strs = lable.split(":")[0].replaceAll("\\(.*\\)", "").split("\\.");
+            return strs[strs.length - 2];
+        } catch (Exception e) {
+            return lable;
+        }
     }
 
     private String modifyLable(String lable) {
@@ -45,8 +57,8 @@ public class Node {
         children.add(node);
     }
 
-    public String getLable() {
-        return lable;
+    public String getLabel() {
+        return label;
     }
 
     public List<Node> getChildren() {
@@ -59,5 +71,9 @@ public class Node {
 
     public int getId() {
         return id;
+    }
+
+    public String getClazz() {
+        return clazz;
     }
 }

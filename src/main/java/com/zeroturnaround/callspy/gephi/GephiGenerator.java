@@ -4,7 +4,9 @@ import com.zeroturnaround.callspy.Stack;
 import com.zeroturnaround.callspy.gephi.bean.Node;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class GephiGenerator {
@@ -54,7 +56,7 @@ public class GephiGenerator {
         for (int i = 0; i < node.getStackHeight(); i ++) {
             preFix += Stack.SPACE;
         }
-        System.out.println(preFix + node.getLable());
+        System.out.println(preFix + node.getLabel());
         for (Node child : node.getChildren())
             printTree(child);
     }
@@ -65,7 +67,14 @@ public class GephiGenerator {
         getNodeAndEdge(node, null, nodeBuffer, edgeBuffer);
         printWriter.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<gexf xmlns=\"http://www.gexf.net/1.2draft\" version=\"1.2\">" +
+                    "<meta lastmodifieddate=\"" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "\">" +
+                        "<creator>callspy2.0</creator>" +
+                        "<description>A dynamic call graph</description>" +
+                    "</meta>"+
                     "<graph mode=\"static\" defaultedgetype=\"directed\">" +
+                        "<attributes class=\"node\">" +
+                            "<attribute id=\"0\" title=\"class\" type=\"string\"/>" +
+                        "</attributes>" +
                         "<nodes>" +
                             nodeBuffer +
                         "</nodes>" +
@@ -77,7 +86,8 @@ public class GephiGenerator {
     }
 
     private static void getNodeAndEdge(Node thisNode, Node previousNode, StringBuffer nodeBuffer, StringBuffer edgeBuffer) {
-        nodeBuffer.append("<node id=\"").append(thisNode.getId()).append("\" label=\"").append(thisNode.getLable()).append("\" />");
+        nodeBuffer.append("<node id=\"").append(thisNode.getId()).append("\" label=\"").append(thisNode.getLabel()).append("\">")
+                .append("<attvalues><attvalue for=\"0\" value=\"").append(thisNode.getClazz()).append("\"/></attvalues></node>");
         if (thisNode.getParent() != null) {
             edgeBuffer.append("<edge id=\"").append(edgeCount).append("\" source=\"")
                     .append(thisNode.getParent().getId()).append("\" target=\"").append(thisNode.getId())
