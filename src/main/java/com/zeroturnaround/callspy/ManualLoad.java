@@ -10,6 +10,7 @@ import java.util.ListIterator;
 
 public class ManualLoad {
     private static boolean yesForAll = false;
+    private static boolean noForAll = false;
     private static boolean ifLoad = false;
     private static String outputFile;
     private static List<String> loadedHistory;
@@ -25,6 +26,10 @@ public class ManualLoad {
         yesForAll = true;
     }
 
+    public static void doNoForAll() {
+        noForAll = true;
+    }
+
     public static void load(String inputFile, String outputFile) throws Exception {
         ManualLoad.outputFile = outputFile;
         ifLoad = true;
@@ -38,7 +43,7 @@ public class ManualLoad {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                if (line.trim().isEmpty())
+                if (line.trim().isEmpty() || line.trim().startsWith("#"))
                     continue;
 
                 loadedHistory.add(line.split("-->")[0]);
@@ -49,6 +54,8 @@ public class ManualLoad {
     public static String getNextLoaded() {
         if (yesForAll)
             return "y";
+        if (noForAll)
+            return "n";
         if (loadedHistoryPointer == loadedHistory.size())
             return null;
         return loadedHistory.get(loadedHistoryPointer++);
@@ -56,7 +63,7 @@ public class ManualLoad {
 
 
     public static void log(String input, String inputLog) {
-        if (yesForAll)
+        if (yesForAll || noForAll)
             return;
         if (choosingHistory == null) {
             choosingHistory = new LinkedList<>();

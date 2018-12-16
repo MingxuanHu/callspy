@@ -75,6 +75,11 @@ public class MyAdvice {
                         input = "y";
                         break;
                     }
+                    if ("no for all".equals(input)) {
+                        ManualLoad.doNoForAll();
+                        input = "n";
+                        break;
+                    }
                     System.out.print("-- Do you want to log the method above (type y or n)? ");
                     input = new Scanner(System.in).nextLine();
                 }
